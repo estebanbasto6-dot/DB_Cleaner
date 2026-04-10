@@ -10,7 +10,7 @@ CREATE TABLE oficina (
   codigo_postal VARCHAR(10) NOT NULL,
   telefono VARCHAR(20) NOT NULL,
   linea_direccion1 VARCHAR(50) NOT NULL,
-  linea_direccion2 VARCHAR(50) DEFAULT NULL,
+  linea_direccion2 VARCHAR(50) DEFAULT 'NO TIENE',
   PRIMARY KEY (codigo_oficina)
 );
 
@@ -54,7 +54,8 @@ CREATE TABLE cliente (
   limite_credito NUMERIC(15,2) DEFAULT NULL,
   PRIMARY KEY (codigo_cliente),
   FOREIGN KEY (codigo_empleado_rep_ventas) REFERENCES empleado (codigo_empleado)
-);
+  )AUTO_INCREMENT =10;
+
 
 CREATE TABLE pedido (
   codigo_pedido INTEGER NOT NULL,
@@ -941,14 +942,14 @@ puesto FROM EMPLEADO;
 /* RETO 1 - Retorna un listado con el código de oficina y 
 la ciudad donde hay oficinas */
 
+/*Retorna un listado con el código de oficina y la ciudad donde hay oficinas.
+
 describe oficina;
 
-select o.codigo_oficina as cod_oficina, o.ciudad country,
-concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
- from oficina o;
- 
  /* RETO 2 - Retorna un listado con la ciudad y 
  el telefono de las oficinas en España. */
+ 
+ 
  
  select ciudad, telefono, pais from oficina
  where upper(pais) = 'ESPAÑA';
@@ -956,6 +957,8 @@ concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  /* RETO 3 - Retorna el listado con todos los clientes que sean
  de la ciudad de Madrid y cuyo representante de ventas tenga 
  el código de empleado 11 ó 30. */
+ 
+ 
  
  describe cliente;
  describe empleado;
@@ -972,7 +975,7 @@ concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  from cliente cl 
  join empleado em 
  on em.codigo_empleado = cl.codigo_empleado_rep_ventas
- where upper(cl.ciudad) = 'MADRID'
+ where upper(cl.ciudad) = 'MADRID' 
  and em.codigo_empleado in (11,30); 
  
 select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
@@ -993,5 +996,41 @@ select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
  where em.codigo_empleado = cl.codigo_empleado_rep_ventas
  and em.codigo_empleado in (11,30)
  group by cl.ciudad
- order by cl.ciudad desc; 
+ order by cl.ciudad desc;
+ 
+DESCRIBE oficina;
+
+DESCRIBE oficina;
+
+/*A. Retorna un listado con el código de oficina y la ciudad donde hay oficinas
+
+SELECT 
+    o.codigo_oficina AS cod_oficina, 
+    o.ciudad AS ciudad_sede,
+    CONCAT(o.codigo_oficina, ' - ', o.ciudad) AS identificador_completo
+FROM oficina o;
+
+/* B Retorna un listado con la ciudad y el teléfono de las oficinas de España.
+
+SELECT ciudad, telefono 
+FROM oficina 
+WHERE pais = 'España';
+
+/*CRetorna un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.
+
+SELECT nombre, apellido1, apellido2, email 
+FROM empleado 
+WHERE codigo_jefe = 7;
+
+/*D Retorna el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
+
+SELECT puesto, nombre, apellido1, apellido2, email 
+FROM empleado 
+WHERE codigo_jefe IS NULL;
+
+/*C Retorna el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
+
+SELECT nombre, apellido1, apellido2, puesto 
+FROM empleado 
+WHERE puesto <> 'Representante Ventas';
 
